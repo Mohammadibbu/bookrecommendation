@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Recommendations</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center">Book Recommendations</h1>
+        <form method="post">
+            <div class="form-group">
+                <label for="search_type">Search by:</label>
+                <select id="search_type" name="search_type" class="form-control">
+                    <option value="title" {% if search_type == 'title' %}selected{% endif %}>Title</option>
+                    <option value="genre" {% if search_type == 'genre' %}selected{% endif %}>Genre</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="search_term">Search Term:</label>
+                <input type="text" id="search_term" name="search_term" class="form-control" value="{{ search_term }}">
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+
+        {% if recommendations is not none %}
+            <h2 class="mt-4">Recommendations:</h2>
+            {% if recommendations.empty %}
+                <p>No recommendations found.</p>
+            {% else %}
+                <table class="table mt-2">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Genre</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for _, row in recommendations.iterrows() %}
+                            <tr>
+                                <td>{{ row['title'] }}</td>
+                                <td>{{ row['genre'] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
